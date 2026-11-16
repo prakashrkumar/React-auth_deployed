@@ -1,0 +1,349 @@
+
+import { useState, type FormEvent } from "react";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Fingerprint,
+  LockKeyhole,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+  Zap,
+} from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    if (password.length < 8) {
+      setError("Password must contain at least 8 characters.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // TODO: Connect your Spring Boot registration API here.
+      // Example: await authService.signup({ name, email, password });
+      console.log({ name, email, password });
+    } catch {
+      setError("Unable to create account. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOAuth = (provider: "google" | "github") => {
+    window.location.href =
+      `http://localhost:8083/oauth2/authorization/${provider}`;
+  };
+
+  const inputClass =
+    "h-12 border-white/10 bg-white/[0.04] pl-11 text-white placeholder:text-slate-600 focus-visible:border-violet-400 focus-visible:ring-violet-400/20";
+
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#070711] text-white">
+      {/* Background */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-violet-600/20 blur-[130px]" />
+        <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-500/15 blur-[130px]" />
+        <div className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:55px_55px]" />
+      </div>
+
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-5 py-10">
+        <div className="grid w-full max-w-6xl overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.035] shadow-[0_25px_100px_rgba(0,0,0,0.5)] backdrop-blur-2xl lg:grid-cols-2">
+
+          {/* LEFT SECTION */}
+          <section className="relative hidden min-h-[760px] flex-col justify-between overflow-hidden border-r border-white/10 p-12 lg:flex">
+            <div className="absolute -left-20 top-40 h-80 w-80 rounded-full bg-violet-600/20 blur-[100px]" />
+            <div className="absolute bottom-20 right-0 h-72 w-72 rounded-full bg-cyan-500/15 blur-[100px]" />
+
+            {/* Brand */}
+            <div className="relative z-10 flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-400/30 bg-violet-500/15 text-violet-300">
+                <Fingerprint size={25} />
+              </div>
+              <span className="text-xl font-bold tracking-tight">
+                Nexus<span className="text-violet-400">Auth</span>
+              </span>
+            </div>
+
+            {/* Illustration */}
+            <div className="relative z-10 flex flex-col items-center py-10">
+              <div className="relative flex h-72 w-72 items-center justify-center">
+                <div className="absolute inset-0 rounded-full border border-violet-400/20" />
+                <div className="absolute inset-5 rounded-full border border-cyan-400/20" />
+                <div className="absolute inset-10 rounded-full border border-violet-400/30" />
+                <div className="absolute h-48 w-48 animate-pulse rounded-full bg-violet-600/20 blur-3xl" />
+
+                <div className="relative flex h-32 w-32 items-center justify-center rounded-[35px] border border-white/20 bg-gradient-to-br from-violet-500/30 to-cyan-500/20 shadow-[0_0_70px_rgba(139,92,246,0.3)]">
+                  <Fingerprint size={65} strokeWidth={1.2} className="text-cyan-200" />
+                </div>
+
+                <div className="absolute right-5 top-12 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-[#171629] text-cyan-300 shadow-xl">
+                  <ShieldCheck size={23} />
+                </div>
+
+                <div className="absolute bottom-10 left-1 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-[#171629] text-violet-300 shadow-xl">
+                  <LockKeyhole size={22} />
+                </div>
+
+                <div className="absolute left-5 top-8 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_15px_#67e8f9]" />
+                <div className="absolute bottom-12 right-3 h-2 w-2 rounded-full bg-violet-400 shadow-[0_0_15px_#a78bfa]" />
+              </div>
+
+              <div className="mt-8 text-center">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-medium text-violet-300">
+                  <Sparkles size={14} />
+                  NEXT-GENERATION SECURITY
+                </div>
+
+                <h2 className="text-4xl font-bold leading-tight tracking-tight">
+                  Your digital world.
+                  <br />
+                  <span className="bg-gradient-to-r from-violet-400 to-cyan-300 bg-clip-text text-transparent">
+                    Your identity.
+                  </span>
+                </h2>
+
+                <p className="mx-auto mt-5 max-w-sm text-sm leading-7 text-slate-400">
+                  Experience a smarter way to authenticate.
+                  One secure identity, endless possibilities.
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="relative z-10 flex items-center justify-between text-xs text-slate-500">
+              <span>© 2026 NexusAuth</span>
+              <span className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                Secure authentication
+              </span>
+            </div>
+          </section>
+
+          {/* RIGHT SECTION */}
+          <section className="flex items-center justify-center px-6 py-12 sm:px-12 lg:px-14">
+            <div className="w-full max-w-md">
+
+              {/* Mobile brand */}
+              <div className="mb-10 flex items-center gap-3 lg:hidden">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15 text-violet-300">
+                  <Fingerprint size={23} />
+                </div>
+                <span className="text-xl font-bold">
+                  Nexus<span className="text-violet-400">Auth</span>
+                </span>
+              </div>
+
+              {/* Heading */}
+              <div className="mb-8">
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/[0.07] px-3 py-1.5 text-xs font-medium text-cyan-300">
+                  <Zap size={13} />
+                  CREATE YOUR SECURE IDENTITY
+                </div>
+
+                <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">
+                  Create your
+                  <br />
+                  <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                    account.
+                  </span>
+                </h1>
+
+                <p className="mt-4 text-sm leading-6 text-slate-400">
+                  Join the next generation of secure authentication.
+                  Create your account and get started in seconds.
+                </p>
+              </div>
+
+              {/* Signup Form */}
+              <form onSubmit={handleSignup} className="space-y-5">
+
+                {/* Name */}
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-sm font-medium text-slate-300">
+                    Full name
+                  </label>
+
+                  <div className="relative">
+                    <UserRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      autoComplete="name"
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-slate-300">
+                    Email address
+                  </label>
+
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      autoComplete="email"
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                {/* Password */}
+                <div className="space-y-2">
+                  <label htmlFor="password" className="text-sm font-medium text-slate-300">
+                    Password
+                  </label>
+
+                  <div className="relative">
+                    <LockKeyhole className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Create a strong password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={8}
+                      autoComplete="new-password"
+                      className={`${inputClass} pr-12`}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white"
+                    >
+                      {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                    </button>
+                  </div>
+
+                  <p className="text-xs text-slate-500">
+                    Use at least 8 characters for your password.
+                  </p>
+                </div>
+
+                {/* Error */}
+                {error && (
+                  <p role="alert" className="text-sm text-red-400">
+                    {error}
+                  </p>
+                )}
+
+                {/* Primary CTA */}
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="group h-12 w-full bg-gradient-to-r from-violet-600 to-indigo-600 font-semibold text-white shadow-[0_8px_30px_rgba(124,58,237,0.25)] transition-all hover:from-violet-500 hover:to-indigo-500"
+                >
+                  {loading ? "Creating account..." : "Create account"}
+                  {!loading && (
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  )}
+                </Button>
+              </form>
+
+              {/* Social Login - Below Signup Form */}
+              <div className="my-7 flex items-center gap-4">
+                <div className="h-px flex-1 bg-white/10" />
+                <span className="text-xs text-slate-500">
+                  OR CONTINUE WITH
+                </span>
+                <div className="h-px flex-1 bg-white/10" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {/* Google */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleOAuth("google")}
+                  className="h-12 border-white/10 bg-white/[0.04] text-white hover:bg-white/10 hover:text-white"
+                >
+                  <svg viewBox="0 0 48 48" className="mr-2 h-4 w-4" aria-hidden="true">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z" transform="translate(0 4)" />
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.25 5.48-4.73 7.18l7.66 5.95c4.48-4.14 7.11-10.24 7.11-17.6Z" />
+                    <path fill="#FBBC05" d="M10.53 28.59A14.3 14.3 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.86.93 7.5 2.56 10.78l7.97-6.19Z" transform="translate(0 4)" />
+                    <path fill="#34A853" d="M24 48c6.47 0 11.91-2.13 15.87-5.8l-7.66-5.95c-2.13 1.45-4.85 2.3-8.21 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z" transform="translate(0 -4)" />
+                  </svg>
+                  Google
+                </Button>
+
+                {/* GitHub */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleOAuth("github")}
+                  className="h-12 border-white/10 bg-white/[0.04] text-white hover:bg-white/10 hover:text-white"
+                >
+                  <FaGithub size={17} className="mr-2" />
+                  GitHub
+                </Button>
+              </div>
+
+              {/* Login Link */}
+              <p className="mt-7 text-center text-sm text-slate-400">
+                Already have an account?{" "}
+                <a
+                  href="/login"
+                  className="font-semibold text-violet-400 transition hover:text-violet-300"
+                >
+                  Sign in
+                </a>
+              </p>
+
+              {/* Security */}
+              <div className="mt-8 flex items-center justify-center gap-2 text-xs text-slate-500">
+                <ShieldCheck size={15} className="text-emerald-400" />
+                Your data is encrypted and securely protected.
+              </div>
+
+              {/* Footer */}
+              <div className="mt-8 flex justify-center gap-6 text-xs text-slate-600">
+                <a href="/privacy" className="transition hover:text-slate-300">
+                  Privacy Policy
+                </a>
+                <a href="/terms" className="transition hover:text-slate-300">
+                  Terms of Service
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  );
+}
+
