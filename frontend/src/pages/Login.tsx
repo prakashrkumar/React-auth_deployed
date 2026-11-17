@@ -1,8 +1,9 @@
 
-import { useState, type FormEvent } from "react";
+import React, { useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
+  CheckCircle2,
   Eye,
   EyeOff,
   Fingerprint,
@@ -16,32 +17,71 @@ import { FaGithub } from "react-icons/fa6";
 
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import type LoginData from "@/models/LoginData";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import useAuth from "@/auth/Store";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const navigate=useNavigate()
+  const login=useAuth((state)=>state.login)
+ const[loginData,setLoginData]=useState<LoginData>({
+  email:"",
+  password:""
+ })
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ const[loading,setLoading]=useState<boolean>(false);
+const [error,setError]=useState<any>(null);
+const[showPassword,setShowPassword]=useState<boolean>(false);
+const[rememberMe,setRememberMe]=useState<boolean>(false);
 
-    setLoading(true);
+const handleOAuth = (provider: "google" | "github") => {
+  window.location.href = `http://localhost:8083/oauth2/authorization/${provider}`;
+};
+const handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
+  setLoginData({
+    ...loginData,
+    [event.target.name]:event.target.value
+  })
+  
+  // server call for login
+}
 
-    try {
-      // Connect your Spring Boot login API here.
-      console.log({ email, password, rememberMe });
-    } finally {
-      setLoading(false);
+const handleLogin=async(event:React.FormEvent)=>{
+    event.preventDefault();
+    // console.log(event.target)
+    // console.log(loginData)
+    if(loginData.email.trim()===""){
+      toast.error("Input required!")
+      return
     }
-  };
+    if(loginData.password.trim()===""){
+      toast.error("Input required!")
+      return ;
+    }
+    try{
+      setLoading(true)
+      // const useInfo=await loginUser(loginData);
+     await login(loginData);
+      toast.success("Login success")
+      // console.log(useInfo)
+      navigate("/dashboard")
 
-  const handleOAuth = (provider: "google" | "github") => {
-    window.location.href =
-      `http://localhost:8083/oauth2/authorization/${provider}`;
-  };
+      // save the cureent user logged in information
+      //localstroage
 
+    }
+    catch(error:any){
+      console.log(error)
+      toast.error("Error !!");
+      setError(error)
+    }
+    finally{
+      setLoading(false)
+    }
+
+  }
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#070711] px-4 py-8 text-white sm:px-6">
 
@@ -171,7 +211,7 @@ export default function Login() {
           {/* Top navigation */}
           <div className="mb-12 flex items-center justify-between border-b border-white/[0.08] pb-5">
             <div className="relative text-sm font-semibold text-white">
-              Sign in
+            Login 
               <div className="absolute -bottom-[21px] left-0 h-[2px] w-full bg-gradient-to-r from-violet-500 to-blue-500" />
             </div>
 
@@ -201,9 +241,20 @@ export default function Login() {
               your account and continue where you left off.
             </p>
           </div>
+          {/* error section */}
+          {error && (
+            <div className="mt-2">
+              <Alert variant={"destructive"}>
+              <CheckCircle2/>
+              <AlertTitle>
+                {error?.response?.data?.message ?? error?.message}
+              </AlertTitle>
+            </Alert>
+            </div>
+          )}
 
           {/* Login form */}
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} autoComplete="on" className="space-y-5">
 
             {/* Email */}
             <div className="space-y-2">
@@ -223,8 +274,9 @@ export default function Login() {
                   placeholder="you@example.com"
                   autoComplete="email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                 name="email"
+                 value={loginData.email}
+                 onChange={handleInputChange}
                   className="h-12 rounded-xl border-white/10 bg-white/[0.035] pl-12 text-sm text-white placeholder:text-slate-600 focus-visible:border-violet-500 focus-visible:ring-violet-500/20"
                 />
               </div>
@@ -253,14 +305,16 @@ export default function Login() {
 
                 <Input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type="password"
                   placeholder="Enter your password"
                   autoComplete="current-password"
                   required
                   minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                 name="password"
+                 value={loginData.password}
+                 onChange={handleInputChange}
                   className="h-12 rounded-xl border-white/10 bg-white/[0.035] pl-12 pr-12 text-sm text-white placeholder:text-slate-600 focus-visible:border-violet-500 focus-visible:ring-violet-500/20"
+                  style={showPassword ? {WebkitTextSecurity:"none"} as React.CSSProperties : {WebkitTextSecurity:"disc"} as React.CSSProperties}
                 />
 
                 <button
@@ -298,7 +352,7 @@ export default function Login() {
               disabled={loading}
               className="group h-12 w-full rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-sm font-semibold shadow-lg shadow-violet-600/20 transition hover:shadow-violet-500/30 hover:brightness-110 disabled:opacity-60"
             >
-              {loading ? "Signing in..." : "Continue"}
+              {loading ? "Signing in..." : "continue"}
               {!loading && (
                 <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
               )}
