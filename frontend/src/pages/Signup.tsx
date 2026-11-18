@@ -13,7 +13,6 @@ import {
   Zap,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
-import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -322,7 +321,7 @@ catch(error){
 
               <div className="grid grid-cols-2 gap-3">
                 {/* Google */}
-                <Button
+                 { <Button
                   type="button"
                   variant="outline"
                   onClick={() => handleOAuth("google")}
@@ -335,7 +334,7 @@ catch(error){
                     <path fill="#34A853" d="M24 48c6.47 0 11.91-2.13 15.87-5.8l-7.66-5.95c-2.13 1.45-4.85 2.3-8.21 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z" transform="translate(0 -4)" />
                   </svg>
                   Google
-                </Button>
+                </Button> }
 
                 {/* GitHub */}
                 <Button
@@ -346,7 +345,9 @@ catch(error){
                 >
                   <FaGithub size={17} className="mr-2" />
                   GitHub
-                </Button>
+                </Button> 
+
+                {/* <OAuth2Button/> */}
               </div>
 
               {/* Login Link */}

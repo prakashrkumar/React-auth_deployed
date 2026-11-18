@@ -13,7 +13,6 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-import { FaGithub } from "react-icons/fa6";
 
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -22,6 +21,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import useAuth from "@/auth/Store";
 import { Alert, AlertTitle } from "@/components/ui/alert";
+import OAuth2Button from "@/components/ui/OAuth2Button";
 
 export default function Login() {
   const navigate=useNavigate()
@@ -36,9 +36,7 @@ const [error,setError]=useState<any>(null);
 const[showPassword,setShowPassword]=useState<boolean>(false);
 const[rememberMe,setRememberMe]=useState<boolean>(false);
 
-const handleOAuth = (provider: "google" | "github") => {
-  window.location.href = `http://localhost:8083/oauth2/authorization/${provider}`;
-};
+
 const handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
   setLoginData({
     ...loginData,
@@ -366,31 +364,10 @@ const handleLogin=async(event:React.FormEvent)=>{
             <div className="h-px flex-1 bg-white/[0.09]" />
           </div>
 
-          {/* Google */}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleOAuth("google")}
-            className="h-12 w-full rounded-xl border-white/10 bg-white/[0.025] text-sm text-slate-200 transition hover:border-violet-400/30 hover:bg-white/[0.06] hover:text-white"
-          >
-            <span className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-sm font-bold">
-              <span className="bg-gradient-to-r from-blue-500 via-green-500 to-red-500 bg-clip-text text-transparent">
-                G
-              </span>
-            </span>
-            Continue with Google
-          </Button>
+         {/* Oauth Buttton */}
+         <OAuth2Button/>
 
-          {/* GitHub */}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleOAuth("github")}
-            className="mt-3 h-12 w-full rounded-xl border-white/10 bg-white/[0.025] text-sm text-slate-200 transition hover:border-violet-400/30 hover:bg-white/[0.06] hover:text-white"
-          >
-            <FaGithub className="mr-2 h-5 w-5" />
-            Continue with GitHub
-          </Button>
+
 
           {/* Register */}
           <p className="mt-9 text-center text-sm text-slate-500">

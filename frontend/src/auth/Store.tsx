@@ -9,15 +9,17 @@ import {persist} from "zustand/middleware"
 // global authstate
 const LOCAL_KEY="auth-app"
 type AuthState={
-  accessToken: string | null;
+  accessToken: String | null;
   user:User |null;
   authStatus:boolean;
   authLoading:boolean;
   checkLogin:()=>boolean | undefined;
+  changeLocalLoginData:(accessToken:String,user:User,authStatus:boolean)=>void;
 
   login:(loginData:LoginData)=>Promise<LoginResponseData>;
   logout:(silent?:boolean)=>Promise<void>;
 }
+
 
 // main logic for global state
 const useAuth=create<AuthState>()(
@@ -28,6 +30,15 @@ const useAuth=create<AuthState>()(
     user:null,
     authStatus:false,
     authLoading:false,
+    changeLocalLoginData:(accessToken,user,authStatus)=>{
+        set({
+            accessToken,
+            user,
+           
+            authStatus
+        });
+
+    },
 
     login:async(loginData)=>{
        console.log("Started login....")
@@ -77,7 +88,8 @@ const useAuth=create<AuthState>()(
             accessToken:null,
             user:null,
             authLoading:false,
-            authStatus:false
+            authStatus:false,
+        
         })
 
     },
@@ -90,6 +102,7 @@ const useAuth=create<AuthState>()(
         }
 
     }
+   
 }),{
     name:LOCAL_KEY,
 }

@@ -135,7 +135,12 @@ export default function Userhome() {
       <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <p className="text-sm text-slate-400">
-            Monday, November 17, 2026
+            {new Date().toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
           <h1 className="text-2xl md:text-3xl font-bold mt-2">
             Welcome back, {user?.name ?? "User"}! 👋
