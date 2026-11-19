@@ -1,7 +1,7 @@
 import useAuth from '@/auth/Store'
 import { Spinner } from '@/components/ui/spinner';
 import { refreshToken } from '@/service/AuthService';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
 
