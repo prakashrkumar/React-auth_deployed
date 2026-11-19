@@ -1,0 +1,8 @@
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  VITE_API_URL = "https://spring-boot-auth-1.onrender.com/api/v1"
+  VITE_BASE_URL = "https://spring-boot-auth-1.onrender.com"
