@@ -3,7 +3,7 @@ import { refreshToken } from "@/service/AuthService";
 import axios from "axios"
 
 const apiClient=axios.create({
-    baseURL:import.meta.env.VITE_API_URL || "https://spring-boot-auth-1.onrender.com/api/v1",
+    baseURL:"https://spring-boot-auth-1.onrender.com/api/v1",
     headers:{
         "Content-Type":"application/json",
     },
