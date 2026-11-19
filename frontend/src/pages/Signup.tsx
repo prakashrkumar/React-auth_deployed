@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   ArrowRight,
@@ -12,7 +11,6 @@ import {
   UserRound,
   Zap,
 } from "lucide-react";
-import { FaGithub } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +18,7 @@ import toast from "react-hot-toast";
 import type RegisterData from "@/models/RegisterData";
 import { registerUser } from "@/service/AuthService";
 import { useNavigate } from "react-router";
+import OAuth2Button from "@/components/ui/OAuth2Button";
 
 export default function Signup() {
 const[data,setData]=useState<RegisterData>({
@@ -32,9 +31,6 @@ const[error,setError]=useState<string|null>(null)
 const[showPassword,setShowPassword]=useState<boolean>(false)
 const navigate=useNavigate();
 
-const handleOAuth = (provider: "google" | "github") => {
-  window.location.href = `http://localhost:8083/oauth2/authorization/${provider}`;
-};
   // text input ,email,password,number,textarea
   // handling form change
   const handleInputChange=(event:React.ChangeEvent<HTMLInputElement>) =>{
@@ -319,36 +315,9 @@ catch(error){
                 <div className="h-px flex-1 bg-white/10" />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {/* Google */}
-                 { <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleOAuth("google")}
-                  className="h-12 border-white/10 bg-white/[0.04] text-white hover:bg-white/10 hover:text-white"
-                >
-                  <svg viewBox="0 0 48 48" className="mr-2 h-4 w-4" aria-hidden="true">
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z" transform="translate(0 4)" />
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.25 5.48-4.73 7.18l7.66 5.95c4.48-4.14 7.11-10.24 7.11-17.6Z" />
-                    <path fill="#FBBC05" d="M10.53 28.59A14.3 14.3 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.86.93 7.5 2.56 10.78l7.97-6.19Z" transform="translate(0 4)" />
-                    <path fill="#34A853" d="M24 48c6.47 0 11.91-2.13 15.87-5.8l-7.66-5.95c-2.13 1.45-4.85 2.3-8.21 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z" transform="translate(0 -4)" />
-                  </svg>
-                  Google
-                </Button> }
+              <OAuth2Button/>
 
-                {/* GitHub */}
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleOAuth("github")}
-                  className="h-12 border-white/10 bg-white/[0.04] text-white hover:bg-white/10 hover:text-white"
-                >
-                  <FaGithub size={17} className="mr-2" />
-                  GitHub
-                </Button> 
-
-                {/* <OAuth2Button/> */}
-              </div>
+              {/* <OAuth2Button/> */}
 
               {/* Login Link */}
               <p className="mt-7 text-center text-sm text-slate-400">
