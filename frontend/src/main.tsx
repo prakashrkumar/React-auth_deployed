@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -9,6 +8,11 @@ import Signup from './pages/Signup.tsx';
 import Services from './pages/Services.tsx';
 import Login from './pages/Login.tsx';
 import RooutLayout from './pages/RooutLayout.tsx';
+import Userlayout from './pages/users/Userlayout.tsx';
+import Userhome from './pages/users/Userhome.tsx';
+import UserProfile from './pages/users/UserProfile.tsx';
+import OAuthSuccess from './pages/OAuthSuccess.tsx';
+import OAuthFailure from './pages/OAuthFailure.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -19,6 +23,13 @@ createRoot(document.getElementById('root')!).render(
      <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
        <Route path='/service' element={<Services/>}/>
+       <Route path='/dashboard' element={<Userlayout/>}>
+       <Route  index element={<Userhome/>}/>
+       <Route path='profile' element={<UserProfile/>}/>
+     
+       </Route>
+       <Route path='oauth/success' element={<OAuthSuccess/>}/> 
+       <Route path='oauth/failure' element={<OAuthFailure/>}/>
    </Route>
    
     </Routes>

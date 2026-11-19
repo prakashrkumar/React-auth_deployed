@@ -1,0 +1,113 @@
+import type LoginData from "@/models/LoginData"
+import type LoginResponseData from "@/models/LoginResponseData"
+import type User from "@/models/User"
+import { loginUser, logoutUser } from "@/service/AuthService"
+import {create} from "zustand"
+import {persist} from "zustand/middleware"
+//type AuthStatus= "idle"| "authenticating" | "authenticated" | "anonymous"
+
+// global authstate
+const LOCAL_KEY="auth-app"
+type AuthState={
+  accessToken: String | null;
+  user:User |null;
+  authStatus:boolean;
+  authLoading:boolean;
+  checkLogin:()=>boolean | undefined;
+  changeLocalLoginData:(accessToken:String,user:User,authStatus:boolean)=>void;
+
+  login:(loginData:LoginData)=>Promise<LoginResponseData>;
+  logout:(silent?:boolean)=>Promise<void>;
+}
+
+
+// main logic for global state
+const useAuth=create<AuthState>()(
+    persist(
+        
+    (set,get)=>({
+    accessToken:null,
+    user:null,
+    authStatus:false,
+    authLoading:false,
+    changeLocalLoginData:(accessToken,user,authStatus)=>{
+        set({
+            accessToken,
+            user,
+           
+            authStatus
+        });
+
+    },
+
+    login:async(loginData)=>{
+       console.log("Started login....")
+                set({authLoading:true}) 
+      try{
+
+       const loginResponseData=await loginUser(loginData);
+       console.log(loginResponseData)
+       set({
+        accessToken:loginResponseData.accessToken,
+        user:loginResponseData.user,
+       authStatus:true
+       })
+       return loginResponseData;
+      }
+      catch(error){
+     console.log(error)
+     throw error;
+      }
+      finally{
+        set({
+            authLoading:false
+        })
+      }
+
+    },
+    logout:async(_silent=false)=>{
+        try{
+    // if(!silent){
+    //     await logoutUser();
+    // }
+    set({
+        authLoading:true,
+    })
+    await logoutUser();
+        }
+        catch(error){
+
+        }
+        finally{
+            set({
+                authLoading:false
+            })
+        }
+        // await logoutUser();
+        set({
+            accessToken:null,
+            user:null,
+            authLoading:false,
+            authStatus:false,
+        
+        })
+
+    },
+    checkLogin:()=>{
+        if(get().accessToken && get().authStatus){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+   
+}),{
+    name:LOCAL_KEY,
+}
+    )
+)
+
+
+export default useAuth;

@@ -1,5 +1,5 @@
 
-import { useState, type FormEvent } from "react";
+import React, { useState } from "react";
 import {
   ArrowRight,
   Eye,
@@ -16,45 +16,76 @@ import { FaGithub } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
+import type RegisterData from "@/models/RegisterData";
+import { registerUser } from "@/service/AuthService";
+import { useNavigate } from "react-router";
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+const[data,setData]=useState<RegisterData>({
+  name:"",
+  email:"",
+  password:""
+});
+const[loading,setLoading]=useState<boolean>(false)
+const[error,setError]=useState<string|null>(null)
+const[showPassword,setShowPassword]=useState<boolean>(false)
+const navigate=useNavigate();
 
-  const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
+const handleOAuth = (provider: "google" | "github") => {
+  window.location.href = `http://localhost:8083/oauth2/authorization/${provider}`;
+};
+  // text input ,email,password,number,textarea
+  // handling form change
+  const handleInputChange=(event:React.ChangeEvent<HTMLInputElement>) =>{
+    // console.log(event.target.name);
+    // console.log(event.target.value)
 
-    if (password.length < 8) {
-      setError("Password must contain at least 8 characters.");
-      return;
-    }
+    setData((value)=>({
+      ...value,
+      [event.target.name]:event.target.value
+    }))
+  }
 
-    setLoading(true);
+  //handling form
+const handleFormSubmit=async(event:React.FormEvent)=>{
+  event.preventDefault()
+  setError(null)
+  console.log(data)
+  if(data.name.trim()===""){
+    toast.error("Name is reuired")
+    return ;
+  }
+  if(data.email.trim()===""){
+    toast.error("Email is reuired")
+    return ;
+  }
+  if(data.password.trim()===""){
+    toast.error("password is reuired")
+    return ;
+  }
 
-    try {
-      // TODO: Connect your Spring Boot registration API here.
-      // Example: await authService.signup({ name, email, password });
-      console.log({ name, email, password });
-    } catch {
-      setError("Unable to create account. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // from submit for registration
+try{
+  setLoading(true)
+ const result=await registerUser(data);
+ console.log(result)
+ toast.success("User register successfully......")
+ setData({
+  name:"",
+  email:"",
+  password:""
+ })
+ // navigate login page
+ navigate("/login");
+}
+catch(error){
+  console.log(error)
+  toast.error("Error in registering the user...")
 
-  const handleOAuth = (provider: "google" | "github") => {
-    window.location.href =
-      `http://localhost:8083/oauth2/authorization/${provider}`;
-  };
-
-  const inputClass =
-    "h-12 border-white/10 bg-white/[0.04] pl-11 text-white placeholder:text-slate-600 focus-visible:border-violet-400 focus-visible:ring-violet-400/20";
-
+}
+  
+}
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#070711] text-white">
       {/* Background */}
@@ -173,7 +204,7 @@ export default function Signup() {
               </div>
 
               {/* Signup Form */}
-              <form onSubmit={handleSignup} className="space-y-5">
+              <form onSubmit={handleFormSubmit} className="space-y-5">
 
                 {/* Name */}
                 <div className="space-y-2">
@@ -188,11 +219,13 @@ export default function Signup() {
                       id="name"
                       type="text"
                       placeholder="Enter your full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+              
                       required
                       autoComplete="name"
-                      className={inputClass}
+                     
+                      name="name"
+                      value={data.name}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -210,11 +243,12 @@ export default function Signup() {
                       id="email"
                       type="email"
                       placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                     
                       required
                       autoComplete="email"
-                      className={inputClass}
+                     name="email"
+                      value={data.email}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -232,12 +266,13 @@ export default function Signup() {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Create a strong password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                    
                       required
                       minLength={8}
                       autoComplete="new-password"
-                      className={`${inputClass} pr-12`}
+                      name="password"
+                      value={data.password}
+                      onChange={handleInputChange}
                     />
 
                     <button
@@ -286,7 +321,7 @@ export default function Signup() {
 
               <div className="grid grid-cols-2 gap-3">
                 {/* Google */}
-                <Button
+                 { <Button
                   type="button"
                   variant="outline"
                   onClick={() => handleOAuth("google")}
@@ -299,7 +334,7 @@ export default function Signup() {
                     <path fill="#34A853" d="M24 48c6.47 0 11.91-2.13 15.87-5.8l-7.66-5.95c-2.13 1.45-4.85 2.3-8.21 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z" transform="translate(0 -4)" />
                   </svg>
                   Google
-                </Button>
+                </Button> }
 
                 {/* GitHub */}
                 <Button
@@ -310,7 +345,9 @@ export default function Signup() {
                 >
                   <FaGithub size={17} className="mr-2" />
                   GitHub
-                </Button>
+                </Button> 
+
+                {/* <OAuth2Button/> */}
               </div>
 
               {/* Login Link */}
