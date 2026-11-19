@@ -1,19 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { FaGithub } from 'react-icons/fa6'
-import { NavLink } from 'react-router'
+
+const BACKEND_URL = "https://spring-boot-auth-1.onrender.com"
 
 const OAuth2Button = () => {
   return (
     <div className="grid grid-cols-2 gap-3">
 
       {/* Google */}
-      <NavLink to={`${import.meta.env.VITE_BASE_URL || "https://spring-boot-auth-1.onrender.com"}/oauth2/authorization/google`}>
+      <a href={`${BACKEND_URL}/oauth2/authorization/google`}>
         <Button
           type="button"
           variant="outline"
           className="h-12 w-full rounded-xl border-white/10 bg-white/[0.04] text-sm font-semibold text-white hover:bg-white/10 hover:text-white"
         >
-          {/* Official Google G SVG */}
           <svg viewBox="0 0 48 48" className="mr-2 h-5 w-5 shrink-0" aria-hidden="true">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z" transform="translate(0 4)" />
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.25 5.48-4.73 7.18l7.66 5.95c4.48-4.14 7.11-10.24 7.11-17.6Z" />
@@ -22,10 +22,10 @@ const OAuth2Button = () => {
           </svg>
           Google
         </Button>
-      </NavLink>
+      </a>
 
       {/* GitHub */}
-      <NavLink to={`${import.meta.env.VITE_BASE_URL || "https://spring-boot-auth-1.onrender.com"}/oauth2/authorization/github`}>
+      <a href={`${BACKEND_URL}/oauth2/authorization/github`}>
         <Button
           type="button"
           variant="outline"
@@ -34,7 +34,7 @@ const OAuth2Button = () => {
           <FaGithub size={18} className="mr-2 shrink-0" />
           GitHub
         </Button>
-      </NavLink>
+      </a>
 
     </div>
   )
