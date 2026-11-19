@@ -7,7 +7,7 @@ const OAuth2Button = () => {
     <div className="grid grid-cols-2 gap-3">
 
       {/* Google */}
-      <NavLink to={`${import.meta.env.VITE_BASE_URL || "http://localhost:8083"}/oauth2/authorization/google`}>
+      <NavLink to={`${import.meta.env.VITE_BASE_URL || "https://spring-boot-auth-1.onrender.com"}/oauth2/authorization/google`}>
         <Button
           type="button"
           variant="outline"
@@ -25,7 +25,7 @@ const OAuth2Button = () => {
       </NavLink>
 
       {/* GitHub */}
-      <NavLink to={`${import.meta.env.VITE_BASE_URL || "http://localhost:8083"}/oauth2/authorization/github`}>
+      <NavLink to={`${import.meta.env.VITE_BASE_URL || "https://spring-boot-auth-1.onrender.com"}/oauth2/authorization/github`}>
         <Button
           type="button"
           variant="outline"
